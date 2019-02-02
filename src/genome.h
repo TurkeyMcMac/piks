@@ -12,19 +12,24 @@
 struct genome_pool;
 
 typedef struct genome {
-	struct genome *next, **last;
-	struct genome_pool *pool;
+	union {
+		struct genome_pool *pool;
+		struct genome *next_free;
+	} link;
 	long refcnt;
 	uint8_t actions[64];
 } genome_t;
 
 typedef struct genome_pool {
-	genome_t *alive, *dead;
+	genome_t *slots, *freed;
+	size_t size;
 } genome_pool_t;
 
-void genome_pool_init(genome_pool_t *pool);
+void genome_pool_init(genome_pool_t *pool, size_t count);
 
 void genome_pool_destroy(genome_pool_t *pool);
+
+size_t genome_pool_get_count(const genome_pool_t *pool);
 
 genome_t *genome_alloc(genome_pool_t *pool);
 
