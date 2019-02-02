@@ -1,5 +1,4 @@
 #include "animal.h"
-#include <assert.h>
 
 void animal_init(animal_t *an, genome_t *gnm, direction_t dir)
 {
