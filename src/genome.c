@@ -5,18 +5,15 @@
 
 void genome_pool_init(genome_pool_t *pool, size_t count)
 {
+	if (count == 0) count = 1;
 	pool->size = count;
 	pool->slots = malloc(count * sizeof(*pool->slots));
-	if (count > 0) {
-		pool->freed = pool->slots;
-		size_t i;
-		for (i = 0; i < count - 1; ++i) {
-			pool->slots[i].link.next_free = pool->slots + i + 1;
-		}
-		pool->slots[i].link.next_free = NULL;
-	} else {
-		pool->freed = NULL;
+	pool->freed = pool->slots;
+	size_t i;
+	for (i = 0; i < count - 1; ++i) {
+		pool->slots[i].link.next_free = pool->slots + i + 1;
 	}
+	pool->slots[i].link.next_free = NULL;
 }
 
 void genome_pool_destroy(genome_pool_t *pool)
