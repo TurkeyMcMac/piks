@@ -2,7 +2,6 @@
 #define GENOME_INCLUDED_
 
 #include "action.h"
-#include "color.h"
 #include "random.h"
 #include <stddef.h>
 #include <stdint.h>
@@ -16,7 +15,6 @@ typedef struct genome {
 	struct genome *next, **last;
 	struct genome_pool *pool;
 	long refcnt;
-	color_t color;
 	uint8_t actions[64];
 } genome_t;
 
