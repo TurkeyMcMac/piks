@@ -3,29 +3,28 @@
 
 #include "action.h"
 #include "color.h"
+#include "random.h"
 #include <stddef.h>
 #include <stdint.h>
 
 #define MUTATION_COUNT 4
 #define MIN_POOL_SIZE 10
 
-typedef struct {
+struct genome_pool;
+
+typedef struct genome {
+	struct genome *next, **last;
+	struct genome_pool *pool;
 	long refcnt;
-	union {
-		genome_t *next_free;
-		genome_pool_t *pool;
-	} manage;
 	color_t color;
 	uint8_t actions[64];
 } genome_t;
 
-typedef struct {
-	genome_t *slots;
-	size_t next;
-	size_t size;
+typedef struct genome_pool {
+	genome_t *alive, *dead;
 } genome_pool_t;
 
-void genome_pool_init(genome_pool_t *pool, size_t size);
+void genome_pool_init(genome_pool_t *pool);
 
 void genome_pool_destroy(genome_pool_t *pool);
 

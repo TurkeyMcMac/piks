@@ -11,23 +11,19 @@ rand_t randomize(rand_t seed)
 
 void scatter_init(scatter_t *scat, size_t limit, size_t count)
 {
-	if (count == 0) {
-		scat->limit = 0;
-	} else {
-		scat->limit = limit;
+	if (count != 0) {
 		scat->division = limit / count;
 	}
-	scat->i = 0;
+	scat->i = count;
 }
 
 bool scatter_has_next(const scatter_t *scat)
 {
-	return scat->i < scat->limit;
+	return scat->i != 0;
 }
 
 size_t scatter_next(scatter_t *scat, rand_t *seed)
 {
-	size_t next = scat->i + scat->division % next_random(seed);
-	scat->i += scat->division;
-	return next;
+	--scat->i;
+	return scat->i * scat->division + next_random(seed) % scat->division;
 }

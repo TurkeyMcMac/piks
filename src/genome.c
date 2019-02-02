@@ -1,22 +1,26 @@
 #include "genome.h"
-#include "random.h"
 #include <stdint.h>
 #include <stdlib.h>
 
-void genome_pool_init(genome_pool_t *pool, size_t size)
+void genome_pool_init(genome_pool_t *pool)
 {
-	if (size < MIN_POOL_SIZE) {
-		pool->size = MIN_POOL_SIZE;
-	} else {
-		pool->size = size;
+	pool->alive = NULL;
+	pool->dead = NULL;
+}
+
+static void free_genomes(genome_t *list)
+{
+	while (list) {
+		genome_t *next = list->next;
+		free(list);
+		list = next;
 	}
-	pool->next = 0;
-	pool->slots = malloc(pool->size * sizeof(*pool->slots));
 }
 
 void genome_pool_destroy(genome_pool_t *pool)
 {
-	free(pool->slots);
+	free_genomes(pool->alive);
+	free_genomes(pool->dead);
 }
 
 action_t genome_get(const genome_t *gnm, input_t input)
@@ -30,22 +34,18 @@ action_t genome_get(const genome_t *gnm, input_t input)
 genome_t *genome_alloc(genome_pool_t *pool)
 {
 	genome_t *gnm;
-	if (pool->freed) {
-		gnm = pool->freed;
-		pool->freed = pool->freed->manage.next_free;
+	if (pool->dead) {
+		gnm = pool->dead;
+		pool->dead = gnm->next;
 	} else {
-		if (pool->next >= pool->size) {
-			pool->size = pool->size * 3 / 2;
-			pool->slots = realloc(pool->slots,
-				pool->size * sizeof(*pool->slots));
-			if (!pool->slots) {
-				/* TODO: throw an error. */
-			}
-		}
-		gnm = &pool->slots[pool->next];
-		++pool->next;
+		gnm = malloc(sizeof(*gnm));
 	}
-	gnm->manage.pool = pool;
+	gnm->next = pool->alive;
+	gnm->last = &pool->alive;
+	pool->alive = gnm;
+	if (gnm->next) {
+		gnm->next->last = &gnm->next;
+	}
 	gnm->refcnt = 0;
 	return gnm;
 }
@@ -68,7 +68,7 @@ genome_t *genome_random(genome_pool_t *pool, rand_t *seed)
 
 genome_t *genome_clone(genome_t *gnm)
 {
-	genome_t *clone = genome_alloc(gnm->manage.pool);
+	genome_t *clone = genome_alloc(gnm->pool);
 	clone->color = gnm->color;
 	memcpy(clone->actions, gnm->actions, 64);
 	return clone;
@@ -83,16 +83,19 @@ void genome_dec(genome_t *gnm)
 {
 	--gnm->refcnt;
 	if (gnm->refcnt <= 0) {
-		genome_pool_t *pool = gnm->manage.pool;
-		gnm->manage.next_free = pool->next;
-		pool->next = gnm;
+		*gnm->last = gnm->next;
+		if (gnm->next) {
+			gnm->next->last = gnm->last;
+		}
+		gnm->next = gnm->pool->dead;
+		gnm->pool->dead = gnm;
 	}
 }
 
 void genome_mutate(genome_t *gnm, rand_t *seed)
 {
 	/* Mutate color */
-	switch (seed % 3) {
+	switch (*seed % 3) {
 	case 0:
 		gnm->color.red = *seed;
 		break;
@@ -105,7 +108,7 @@ void genome_mutate(genome_t *gnm, rand_t *seed)
 	}
 	/* Mutate actions */
 	for (size_t i = 0; i < MUTATION_COUNT; ++i) {
-		gnm->[(i + *seed) % 64] ^= 1 << (*seed % 8);
+		gnm->actions[(i + *seed) % 64] ^= 1 << (*seed % 8);
 		next_random(seed);
 	}
 }

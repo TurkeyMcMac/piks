@@ -2,13 +2,15 @@
 #define RANDOM_INCLUDED_
 
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 typedef uint32_t rand_t;
 
 rand_t randomize(rand_t seed);
 
 typedef struct {
-	size_t limit, division, i;
+	size_t division, i;
 } scatter_t;
 
 static inline rand_t next_random(rand_t *randp)
