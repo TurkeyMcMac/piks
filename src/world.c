@@ -2,9 +2,13 @@
 #include <assert.h>
 #include <stdlib.h>
 
-void world_init(world_t *world, size_t width, size_t height, rand_t seed)
+void world_init(world_t *world,
+	size_t width,
+	size_t height,
+	size_t genomes,
+	rand_t seed)
 {
-	genome_pool_init(&world->genomes);
+	genome_pool_init(&world->genomes, genomes);
 	world->width = width;
 	world->height = height;
 	world->rand = seed;
@@ -20,6 +24,7 @@ void world_destroy(world_t *world)
 void world_populate(world_t *world, size_t pop)
 {
 	scatter_t scat; 
+	if (pop == -1) pop = genome_pool_get_count(&world->genomes);
 	scatter_init(&scat, world->width * world->height, pop);
 	while (scatter_has_next(&scat)) {
 		size_t i = scatter_next(&scat, &world->rand);

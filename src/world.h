@@ -12,7 +12,11 @@ typedef struct {
 	animal_t *cells;
 } world_t;
 
-void world_init(world_t *world, size_t width, size_t height, rand_t seed);
+void world_init(world_t *world,
+	size_t width,
+	size_t height,
+	size_t genomes,
+	rand_t seed);
 
 void world_destroy(world_t *world);
 

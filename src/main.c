@@ -6,8 +6,8 @@
 int main(int argc, char *argv[])
 {
 	world_t world;
-	world_init(&world, 100, 50, time(NULL));
-	world_populate(&world, 500);
+	world_init(&world, 100, 50, 500, time(NULL));
+	world_populate(&world, -1);
 	begin_graphics();
 	for (size_t x = 0; x < world.width; ++x) {
 		for (size_t y = 0; y < world.height; ++y) {
