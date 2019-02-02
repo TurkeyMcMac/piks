@@ -48,7 +48,9 @@ genome_t *genome_alloc(genome_pool_t *pool)
 genome_t *genome_random(genome_pool_t *pool, rand_t *seed)
 {
 	genome_t *gnm = genome_alloc(pool);
-	if (!gnm) return NULL;
+	if (!gnm) {
+		return &pool->slots[next_random(seed) % pool->size];
+	}
 	for (size_t i = 0; i < 64; ++i) {
 		gnm->actions[i] = *seed;
 		next_random(seed);
@@ -56,12 +58,17 @@ genome_t *genome_random(genome_pool_t *pool, rand_t *seed)
 	return gnm;
 }
 
-genome_t *genome_clone(genome_t *gnm)
+genome_t *genome_mutant(genome_t *gnm, rand_t *seed)
 {
-	genome_t *clone = genome_alloc(gnm->link.pool);
-	if (!clone) return NULL;
-	memcpy(clone->actions, gnm->actions, 64);
-	return clone;
+	genome_pool_t *pool = gnm->link.pool;
+	genome_t *mut = genome_alloc(pool);
+	if (!mut) return gnm;
+	memcpy(mut->actions, gnm->actions, 64);
+	for (size_t i = 0; i < MUTATION_COUNT; ++i) {
+		mut->actions[(i + *seed) % 64] ^= 1 << (*seed % 8);
+		next_random(seed);
+	}
+	return mut;
 }
 
 void genome_inc(genome_t *gnm)
@@ -79,10 +86,3 @@ void genome_dec(genome_t *gnm)
 	}
 }
 
-void genome_mutate(genome_t *gnm, rand_t *seed)
-{
-	for (size_t i = 0; i < MUTATION_COUNT; ++i) {
-		gnm->actions[(i + *seed) % 64] ^= 1 << (*seed % 8);
-		next_random(seed);
-	}
-}

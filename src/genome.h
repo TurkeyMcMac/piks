@@ -35,9 +35,7 @@ genome_t *genome_alloc(genome_pool_t *pool);
 
 genome_t *genome_random(genome_pool_t *pool, rand_t *seed);
 
-genome_t *genome_clone(genome_t *gnm);
-
-void genome_mutate(genome_t *gnm, rand_t *seed);
+genome_t *genome_mutant(genome_t *gnm, rand_t *seed);
 
 void genome_inc(genome_t *gnm);
 

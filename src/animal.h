@@ -28,7 +28,7 @@ void animal_null(animal_t *an);
 
 bool animal_is_null(const animal_t *an);
 
-void animal_mutant(animal_t *src, animal_t *dst);
+void animal_mutant(animal_t *src, animal_t *dst, rand_t *seed);
 
 action_t animal_get_action(const animal_t *an, input_t input);
 

@@ -24,11 +24,11 @@ bool animal_is_null(const animal_t *an)
 	return an->genome == NULL;
 }
 
-void animal_mutant(animal_t *src, animal_t *dst)
+void animal_mutant(animal_t *src, animal_t *dst, rand_t *seed)
 {
-	genome_t *clone = genome_clone(src->genome);
-	genome_inc(clone);
-	animal_init(dst, clone, src->direction);
+	genome_t *mut = genome_mutant(src->genome, seed);
+	genome_inc(mut);
+	animal_init(dst, mut, src->direction);
 }
 
 action_t animal_get_action(const animal_t *an, input_t input)
