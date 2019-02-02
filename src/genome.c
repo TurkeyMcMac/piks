@@ -46,7 +46,7 @@ genome_t *genome_alloc(genome_pool_t *pool)
 		++pool->next;
 	}
 	gnm->manage.pool = pool;
-	gnm->refcnt = 1;
+	gnm->refcnt = 0;
 	return gnm;
 }
 
@@ -81,12 +81,11 @@ void genome_inc(genome_t *gnm)
 
 void genome_dec(genome_t *gnm)
 {
+	--gnm->refcnt;
 	if (gnm->refcnt <= 0) {
 		genome_pool_t *pool = gnm->manage.pool;
 		gnm->manage.next_free = pool->next;
 		pool->next = gnm;
-	} else {
-		--gnm->refcnt;
 	}
 }
 
