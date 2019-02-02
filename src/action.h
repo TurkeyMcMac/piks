@@ -9,9 +9,9 @@ typedef enum {
 	ACTION_MOVE,
 	ACTION_LEFT,
 	ACTION_RIGHT,
-	ACTION_BABY,
+	ACTION_BABY
 
-	ACTION_NUMBER
+#define ACTION_NUMBER 4
 } action_t;
 
 #endif /* ACTION_INCLUDED_ */

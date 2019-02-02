@@ -11,7 +11,7 @@ typedef enum {
 	DIRECTION_LEFT,
 	DIRECTION_DOWN,
 
-	DIRECTION_NUMBER
+#define DIRECTION_NUMBER 4
 } direction_t;
 
 typedef struct {
