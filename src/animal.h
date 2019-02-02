@@ -15,7 +15,9 @@ typedef enum {
 } direction_t;
 
 typedef struct {
-	uintptr_t genome;
+	genome_t *genome;
+	uint8_t direction;
+	uint8_t flags;
 } animal_t;
 
 void animal_init(animal_t *an, genome_t *gnm, direction_t dir);
@@ -33,6 +35,8 @@ action_t animal_get_action(const animal_t *an, input_t input);
 void animal_turn(animal_t *an, int quarts);
 
 direction_t animal_get_direction(const animal_t *an);
+
+uint8_t *animal_flags(animal_t *an);
 
 void animal_die(animal_t *an);
 
