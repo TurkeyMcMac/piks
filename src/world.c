@@ -44,7 +44,6 @@ void world_populate(world_t *world, size_t pop)
 
 animal_t *world_get(world_t *world, size_t x, size_t y)
 {
-	//printf("Get (%zu, %zu)\n", x, y);
 	assert(x < world->width);
 	assert(y < world->height);
 	return &world->cells[y * world->width + x];
