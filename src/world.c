@@ -33,13 +33,6 @@ void world_populate(world_t *world, size_t pop)
 		direction_t dir = next_random(&world->rand) % DIRECTION_NUMBER;
 		animal_init(&world->cells[i], gnm, dir);
 	}
-	size_t j = 0;
-	for (size_t x = 0; x < world->width; ++x) {
-		for (size_t y = 0; y < world->height; ++y) {
-			if (!animal_is_null(world_get(world, x, y))) ++j;
-		}
-	}
-	assert(j == pop);
 }
 
 animal_t *world_get(world_t *world, size_t x, size_t y)
