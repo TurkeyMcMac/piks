@@ -192,6 +192,15 @@ static animal_t *get_wrapped(world_t *world,
 	return world_get(world, targ_x, targ_y);
 }
 
+static void create_baby(world_t *world, animal_t *parent, animal_t *child)
+{
+	if (next_random(&world->rand) % 100 < MUTATION_CHANCE) {
+		animal_mutant(parent, child, &world->rand);
+	} else {
+		animal_clone(parent, child);
+	}
+}
+
 static void carry_out_action(world_t *world, size_t x, size_t y)
 {
 	animal_t *an = world_get(world, x, y);
@@ -218,7 +227,7 @@ static void carry_out_action(world_t *world, size_t x, size_t y)
 			x, y, WRAPPING2_GET(flags), (dir + 2) & 0x3);
 		if (animal_is_null(place) && !animal_is_null(targ)) {
 			animal_die(targ);
-			animal_clone(an, place); /* TODO: evolution */
+			create_baby(world, an, place);
 			animal_turn(place, 2);
 			*animal_flags(place) |= MOVED;
 		}

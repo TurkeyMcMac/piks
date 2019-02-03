@@ -5,6 +5,8 @@
 #include "genome.h"
 #include "animal.h"
 
+#define MUTATION_CHANCE 3 /* 3% */
+
 typedef struct {
 	genome_pool_t genomes;
 	size_t width, height;
