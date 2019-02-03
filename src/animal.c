@@ -10,7 +10,7 @@ void animal_init(animal_t *an, genome_t *gnm, direction_t dir)
 
 void animal_clone(animal_t *src, animal_t *dst)
 {
-	*src = *dst;
+	*dst = *src;
 	genome_inc(dst->genome);
 }
 
