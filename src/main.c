@@ -18,7 +18,7 @@ static void next_frame(world_t *world)
 int main(int argc, char *argv[])
 {
 	world_t world;
-	world_init(&world, 80, 23, 300, time(NULL));
+	world_init(&world, 100, 70, 300, time(NULL));
 	world_populate(&world, -1);
 	world_step(&world);
 	begin_graphics();
