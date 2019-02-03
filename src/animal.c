@@ -47,7 +47,7 @@ direction_t animal_get_direction(const animal_t *an)
 	return an->direction;
 }
 
-uint8_t *animal_flags(animal_t *an)
+uint16_t *animal_flags(animal_t *an)
 {
 	return &an->flags;
 }
