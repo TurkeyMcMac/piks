@@ -216,12 +216,11 @@ static void carry_out_action(world_t *world, size_t x, size_t y)
 	targ = get_wrapped(world, x, y, WRAPPING_GET(flags), dir);
 	switch (TYPE_GET(flags)) {
 	case UA_MOVE:
-		{
-			animal_t temp;
-			temp = *targ;
+		if (animal_is_null(targ)) {
 			*targ = *an;
-			*an = temp;
-		} break;
+			animal_null(an);
+		}
+		break;
 	case UA_BABY:
 		place = get_wrapped(world,
 			x, y, WRAPPING2_GET(flags), (dir + 2) & 0x3);
