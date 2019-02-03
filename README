@@ -1,0 +1,12 @@
+PIKS
+====
+This is another life simulator. It is simpler than the other ones I've made.
+Each animal, a "pik" or whatever, has a direction as its state. It senses which
+of the eight cells around are alive, like in Conway's Game of Life. Each animal
+also contains a pointer to a genome, a table of the responses to each possible
+configuration (there are 256.) A response can be one of the following:
+ * Move forward. This works only if the cell in front is empty.
+ * Turn right or left.
+ * Produce a baby. The cell in front must be alive, and the cell behind must be
+   dead. The animal in front is consumed, while the cell behind has the baby put
+   in it. The baby has a small chance of being a mutant, facilitating evolution.
