@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Error when reading: ");
 			file_error_print(err);
 			fprintf(stderr, "\n");
-			return 1;
+			return err;
 		}
 		world_read(&world, from, jb);
 		fclose(from);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Error when writing: ");
 		file_error_print(err);
 		fprintf(stderr, "\n");
-		return 1;
+		goto clean_up;
 	}
 	while (!sim_stopped()) {
 		next_frame(&world);
@@ -58,5 +58,9 @@ int main(int argc, char *argv[])
 		++save_tick;
 	}
 	world_write(&world, to, jb);
+clean_up:
 	end_graphics();
+	world_destroy(&world);
+	fclose(to);
+	return err;
 }
