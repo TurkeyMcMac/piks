@@ -142,12 +142,12 @@ void genome_pool_read(genome_pool_t *pool, FILE *from, jmp_buf jb)
 		if (i >= pool->size) return;
 	}
 	pool->freed = &pool->slots[i];
-	do {
+	while (++i < pool->size) {
 		if (genome_freed(pool, i)) {
 			pool->slots[i].link.next_free = pool->freed;
 			pool->freed = &pool->slots[i];
 		}
-	} while (++i < pool->size);
+	}
 }
 
 void genome_pool_write(const genome_pool_t *pool, FILE *to, jmp_buf jb)
