@@ -3,6 +3,7 @@
 
 #include "action.h"
 #include "random.h"
+#include "file.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -42,5 +43,13 @@ void genome_inc(genome_t *gnm);
 void genome_dec(genome_t *gnm);
 
 action_t genome_get(const genome_t *gnm, input_t input);
+
+size_t genome_get_id(const genome_t *gnm);
+
+genome_t *genome_pool_get(genome_pool_t *pool, size_t id);
+
+void genome_pool_read(genome_pool_t *pool, FILE *from, jmp_buf jb);
+
+void genome_pool_write(const genome_pool_t *pool, FILE *to, jmp_buf jb);
 
 #endif /* GENOME_INCLUDED_ */

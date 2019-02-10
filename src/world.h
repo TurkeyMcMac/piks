@@ -4,6 +4,7 @@
 #include "random.h"
 #include "genome.h"
 #include "animal.h"
+#include "file.h"
 
 #define MUTATION_CHANCE 3 /* 3% */
 
@@ -33,5 +34,9 @@ static size_t world_height(const world_t *world)
 { return world->height; }
 
 void world_step(world_t *world);
+
+void world_read(world_t *world, FILE *from, jmp_buf jb);
+
+void world_write(const world_t *world, FILE *to, jmp_buf jb);
 
 #endif /* WORLD_INCLUDED_ */

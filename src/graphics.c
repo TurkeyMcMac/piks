@@ -10,11 +10,17 @@ void begin_graphics(void)
 	start_color();
 	init_pair(NULL_PAIR, COLOR_BLACK, COLOR_BLUE);
 	init_pair(ANIMAL_PAIR, COLOR_RED, COLOR_WHITE);
+	nodelay(stdscr, true);
 }
 
 void end_graphics(void)
 {
 	endwin();
+}
+
+bool sim_stopped(void)
+{
+	return getch() != ERR;
 }
 
 static void draw_null(size_t x, size_t y)

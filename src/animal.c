@@ -57,3 +57,20 @@ void animal_die(animal_t *an)
 	genome_dec(an->genome);
 	animal_null(an);
 }
+
+void animal_read(animal_t *an, genome_pool_t *pool, FILE *from, jmp_buf jb)
+{
+	uint32_t id = read_32(from, jb);
+	an->genome = genome_pool_get(pool, id);
+	if (!an->genome) longjmp(jb, FE_INVALID_GENOME_ID);
+	genome_inc(an->genome);
+	int dir = fgetc(from);
+	if (dir == EOF) longjmp(jb, feof(from) ? FE_UNEXPECTED_EOF : FE_SYSTEM);
+	an->direction = dir;
+}
+
+void animal_write(const animal_t *an, FILE *to, jmp_buf jb)
+{
+	write_32(genome_get_id(an->genome), to, jb);
+	if (fputc(an->direction, to) == EOF) longjmp(jb, FE_SYSTEM);
+}

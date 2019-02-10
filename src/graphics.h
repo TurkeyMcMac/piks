@@ -2,11 +2,14 @@
 #define GRAPHICS_INCLUDED_
 
 #include "animal.h"
+#include <stdbool.h>
 #include <stddef.h>
 
 void begin_graphics(void);
 
 void end_graphics(void);
+
+bool sim_stopped(void);
 
 void draw_cell(const animal_t *cell, size_t x, size_t y);
 

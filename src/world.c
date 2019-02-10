@@ -251,3 +251,61 @@ void world_step(world_t *world)
 	get_actions(world);
 	carry_out_actions(world);
 }
+
+void world_read(world_t *world, FILE *from, jmp_buf jb)
+{
+	jmp_buf local;
+	file_error_t err = FE_SUCCESS;
+	read_file_header(from, jb);
+	world->width = read_32(from, jb);
+	world->height = read_32(from, jb);
+	world->rand = read_32(from, jb);
+	genome_pool_read(&world->genomes, from, jb);
+	world->cells = calloc(world->width * world->height,
+		sizeof(*world->cells));
+	if ((err = setjmp(local))) goto error_cells;
+	for (size_t i = 0; i < world->width * world->height; ++i) {
+		int byte = fgetc(from);
+		if (byte == EOF) {
+			if (feof(from)) break;
+			err = FE_SYSTEM;
+			goto error_cells;
+		}
+		if (byte & 0x80) {
+			animal_read(&world->cells[i], &world->genomes, from,
+				local);
+		} else {
+			i += byte;
+		}
+	}
+	return;
+
+error_cells:
+	free(world->cells);
+	longjmp(jb, err);
+}
+
+void world_write(const world_t *world, FILE *to, jmp_buf jb)
+{
+	write_file_header(to, jb);
+	write_32(world->width, to, jb);
+	write_32(world->height, to, jb);
+	write_32(world->rand, to, jb);
+	genome_pool_write(&world->genomes, to, jb);
+	int null_streak = -1;
+	for (size_t i = 0; i < world->width * world->height; ++i) {
+		bool null = animal_is_null(&world->cells[i]);
+		if (!null && null_streak >= 0 || null_streak >= 127) {
+			if (fputc(null_streak, to) == EOF)
+				longjmp(jb, FE_SYSTEM);
+			null_streak = -1;
+		}
+		if (null) {
+			++null_streak;
+		} else {
+			if (fputc(0x80, to) == EOF)
+				longjmp(jb, FE_SYSTEM);
+			animal_write(&world->cells[i], to, jb);
+		}
+	}
+}

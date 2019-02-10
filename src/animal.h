@@ -2,6 +2,7 @@
 #define ANIMALS_INCLUDED_
 
 #include "genome.h"
+#include "file.h"
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -39,5 +40,9 @@ direction_t animal_get_direction(const animal_t *an);
 uint16_t *animal_flags(animal_t *an);
 
 void animal_die(animal_t *an);
+
+void animal_read(animal_t *an, genome_pool_t *pool, FILE *from, jmp_buf jb);
+
+void animal_write(const animal_t *an, FILE *to, jmp_buf jb);
 
 #endif /* ANIMALS_INCLUDED_ */
