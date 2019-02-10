@@ -1,7 +1,7 @@
 #include "genome.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 void genome_pool_init(genome_pool_t *pool, size_t count)
 {
