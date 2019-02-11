@@ -88,7 +88,8 @@ void genome_dec(genome_t *gnm)
 
 size_t genome_get_id(const genome_t *gnm)
 {
-	return (size_t)(gnm - gnm->link.pool->slots);
+	return (size_t)((void *)gnm - (void *)gnm->link.pool->slots)
+		/ sizeof(*gnm);
 }
 
 static bool genome_freed(const genome_pool_t *pool, size_t id)
