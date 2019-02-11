@@ -140,7 +140,10 @@ void genome_pool_read(genome_pool_t *pool, FILE *from, jmp_buf jb)
 	size_t i = 0;
 	while (!genome_freed(pool, i)) {
 		++i;
-		if (i >= pool->size) return;
+		if (i >= pool->size) {
+			pool->freed = NULL;
+			return;
+		}
 	}
 	pool->freed = &pool->slots[i];
 	while (++i < pool->size) {
