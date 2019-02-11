@@ -27,11 +27,8 @@ void world_populate(world_t *world, size_t pop);
 
 animal_t *world_get(world_t *world, size_t x, size_t y);
 
-static size_t world_width(const world_t *world)
-{ return world->width; }
-
-static size_t world_height(const world_t *world)
-{ return world->height; }
+#define world_width(world) ((world)->width)
+#define world_height(world) ((world)->height)
 
 void world_step(world_t *world);
 
