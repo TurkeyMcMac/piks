@@ -23,6 +23,10 @@ int main(int argc, char *argv[])
 	file_error_t err = FE_SUCCESS;
 	world_t world;
 	FILE *to;
+	if (argc < 2) {
+		fprintf(stderr, "Usage: piks <infile> <outfile>\n");
+		return 1;
+	}
 	if (strcmp(argv[1], "-") != 0) {
 		FILE *from = fopen(argv[1], "r");
 		if ((err = setjmp(jb))) {
