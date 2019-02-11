@@ -38,27 +38,19 @@ int main(int argc, char *argv[])
 		world_populate(&world, -1);
 	}
 	to = fopen(argv[2], "w");
-	int save_tick = 0;
 	begin_graphics();
+	while (!sim_stopped()) {
+		next_frame(&world);
+		usleep(150000);
+	}
 	if ((err = setjmp(jb))) {
 		end_graphics();
 		fprintf(stderr, "Error when writing: ");
 		file_error_print(err);
 		fprintf(stderr, "\n");
-		goto clean_up;
+	} else {
+		world_write(&world, to, jb);
 	}
-	while (!sim_stopped()) {
-		next_frame(&world);
-		usleep(150000);
-		if (save_tick == 100) {
-			world_write(&world, to, jb);
-			rewind(to);
-			save_tick = 0;
-		}
-		++save_tick;
-	}
-	world_write(&world, to, jb);
-clean_up:
 	end_graphics();
 	world_destroy(&world);
 	fclose(to);
