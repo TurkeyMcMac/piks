@@ -295,7 +295,7 @@ void world_write(const world_t *world, FILE *to, jmp_buf jb)
 	int null_streak = -1;
 	for (size_t i = 0; i < world->width * world->height; ++i) {
 		bool null = animal_is_null(&world->cells[i]);
-		if (!null && null_streak >= 0 || null_streak >= 127) {
+		if ((!null && null_streak >= 0) || null_streak >= 127) {
 			if (fputc(null_streak, to) == EOF)
 				longjmp(jb, FE_SYSTEM);
 			null_streak = -1;
