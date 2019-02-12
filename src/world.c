@@ -77,6 +77,8 @@ static enum wrapping get_wrapping(direction_t dir,
 	case DIRECTION_LEFT: return l;
 	case DIRECTION_DOWN: return b;
 	}
+	assert(!"Unreachable");
+	return -1;
 }
 
 static void get_action(world_t *world, size_t x, size_t y,
