@@ -58,6 +58,13 @@ genome_t *genome_random(genome_pool_t *pool, rand_t *seed)
 	return gnm;
 }
 
+enum mutation {
+	MUT_FLIP, /* Flipped bit */
+	MUT_SWAP, /* Swapped bytes */
+	MUT_DUP,  /* Duplicated byte */
+#define MUT_COUNT 3
+};
+
 genome_t *genome_mutant(genome_t *gnm, rand_t *seed)
 {
 	genome_pool_t *pool = gnm->link.pool;
@@ -65,8 +72,25 @@ genome_t *genome_mutant(genome_t *gnm, rand_t *seed)
 	if (!mut) return gnm;
 	memcpy(mut->actions, gnm->actions, 64);
 	for (size_t i = 0; i < MUTATION_COUNT; ++i) {
-		mut->actions[(i + *seed) % 64] ^= 1 << (*seed % 8);
-		next_random(seed);
+		switch (*seed % MUT_COUNT) {
+		case MUT_FLIP:
+			mut->actions[(i + *seed) % 64] ^= 1 << (*seed % 8);
+			next_random(seed);
+			break;
+		case MUT_SWAP:
+			{
+				uint8_t i1 = next_random(seed) % 64,
+					i2 = next_random(seed) % 64,
+					temp = mut->actions[i1];
+				mut->actions[i1] = mut->actions[i2];
+				mut->actions[i2] = temp;
+			}
+			break;
+		case MUT_DUP:
+			mut->actions[next_random(seed) % 64] =
+				mut->actions[next_random(seed) % 64];
+			break;
+		}
 	}
 	return mut;
 }
