@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-void world_init(world_t *world,
+int world_init(world_t *world,
 	size_t width,
 	size_t height,
 	size_t genomes,
@@ -14,6 +14,8 @@ void world_init(world_t *world,
 	world->height = height;
 	world->rand = seed;
 	world->cells = calloc(width * height, sizeof(*world->cells));
+	if (!world->cells) return -1;
+	return 0;
 }
 
 void world_destroy(world_t *world)
@@ -267,6 +269,7 @@ void world_read(world_t *world, FILE *from, jmp_buf jb)
 	genome_pool_read(&world->genomes, from, jb);
 	world->cells = calloc(world->width * world->height,
 		sizeof(*world->cells));
+	if (!world->cells) longjmp(jb, FE_SYSTEM);
 	if ((err = setjmp(local))) goto error_cells;
 	for (size_t i = 0; i < world->width * world->height; ++i) {
 		int byte = fgetc(from);

@@ -26,7 +26,7 @@ typedef struct genome_pool {
 	size_t size;
 } genome_pool_t;
 
-void genome_pool_init(genome_pool_t *pool, size_t count);
+int genome_pool_init(genome_pool_t *pool, size_t count);
 
 void genome_pool_destroy(genome_pool_t *pool);
 

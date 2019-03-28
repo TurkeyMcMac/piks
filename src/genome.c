@@ -3,17 +3,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-void genome_pool_init(genome_pool_t *pool, size_t count)
+int genome_pool_init(genome_pool_t *pool, size_t count)
 {
 	if (count == 0) count = 1;
 	pool->size = count;
 	pool->slots = malloc(count * sizeof(*pool->slots));
+	if (!pool->slots) return -1;
 	pool->freed = pool->slots;
 	size_t i;
 	for (i = 0; i < count - 1; ++i) {
 		pool->slots[i].link.next_free = pool->slots + i + 1;
 	}
 	pool->slots[i].link.next_free = NULL;
+	return 0;
 }
 
 void genome_pool_destroy(genome_pool_t *pool)
@@ -154,6 +156,7 @@ void genome_pool_read(genome_pool_t *pool, FILE *from, jmp_buf jb)
 	size_t count = read_32(from, jb);
 	pool->size = read_32(from, jb);
 	pool->slots = calloc(pool->size, sizeof(*pool->slots));
+	if (!pool->slots) longjmp(jb, FE_SYSTEM);
 	if ((err = setjmp(local))) {
 		free(pool->slots);
 		longjmp(jb, err);
