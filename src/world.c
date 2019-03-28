@@ -261,6 +261,8 @@ void world_read(world_t *world, FILE *from, jmp_buf jb)
 	read_file_header(from, jb);
 	world->width = read_32(from, jb);
 	world->height = read_32(from, jb);
+	if (world->width < 2 || world->height < 2)
+		longjmp(jb, FE_INVALID_DIMENSIONS);
 	world->rand = read_32(from, jb);
 	genome_pool_read(&world->genomes, from, jb);
 	world->cells = calloc(world->width * world->height,

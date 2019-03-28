@@ -49,6 +49,9 @@ void file_error_print(file_error_t err)
 	case FE_INVALID_DIRECTION:
 		fprintf(stderr, "Invalid animal direction");
 		return;
+	case FE_INVALID_DIMENSIONS:
+		fprintf(stderr, "Invalid world dimensions");
+		return;
 	default:
 		fprintf(stderr, "Unknown error: %d", err);
 		return;

@@ -14,6 +14,7 @@ typedef enum {
 	FE_INVALID_FORMAT,
 	FE_INVALID_GENOME_ID,
 	FE_INVALID_DIRECTION,
+	FE_INVALID_DIMENSIONS
 } file_error_t;
 
 void read_file_header(FILE *from, jmp_buf jb);
