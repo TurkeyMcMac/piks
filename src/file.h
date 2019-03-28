@@ -12,7 +12,8 @@ typedef enum {
 	FE_SYSTEM,
 	FE_UNEXPECTED_EOF,
 	FE_INVALID_FORMAT,
-	FE_INVALID_GENOME_ID
+	FE_INVALID_GENOME_ID,
+	FE_INVALID_DIRECTION,
 } file_error_t;
 
 void read_file_header(FILE *from, jmp_buf jb);

@@ -46,6 +46,9 @@ void file_error_print(file_error_t err)
 	case FE_INVALID_GENOME_ID:
 		fprintf(stderr, "Invalid genome ID");
 		return;
+	case FE_INVALID_DIRECTION:
+		fprintf(stderr, "Invalid animal direction");
+		return;
 	default:
 		fprintf(stderr, "Unknown error: %d", err);
 		return;

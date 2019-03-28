@@ -66,6 +66,8 @@ void animal_read(animal_t *an, genome_pool_t *pool, FILE *from, jmp_buf jb)
 	genome_inc(an->genome);
 	int dir = fgetc(from);
 	if (dir == EOF) longjmp(jb, feof(from) ? FE_UNEXPECTED_EOF : FE_SYSTEM);
+	if ((unsigned)dir >= DIRECTION_NUMBER)
+		longjmp(jb, FE_INVALID_DIRECTION);
 	an->direction = dir;
 }
 
