@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	}
 	if (strcmp(argv[1], "-") != 0) {
 		FILE *from = fopen(argv[1], "r");
-		if ((err = setjmp(jb))) {
+		if ((!from && (err = FE_SYSTEM)) || (err = setjmp(jb))) {
 			fprintf(stderr, "Error when reading: ");
 			file_error_print(err);
 			fprintf(stderr, "\n");
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 		next_frame(&world);
 		usleep(150000);
 	}
-	if ((err = setjmp(jb))) {
+	if ((!to && (err = FE_SYSTEM)) || (err = setjmp(jb))) {
 		end_graphics();
 		fprintf(stderr, "Error when writing: ");
 		file_error_print(err);
