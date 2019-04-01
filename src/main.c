@@ -1,7 +1,10 @@
 #include "world.h"
 #include "graphics.h"
 #include "file.h"
+#include "cli.h"
+#include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
@@ -23,31 +26,39 @@ int main(int argc, char *argv[])
 	file_error_t err = FE_SUCCESS;
 	world_t world;
 	FILE *to;
-	if (argc < 2) {
-		fprintf(stderr, "Usage: piks <infile> <outfile>\n");
-		return 1;
-	}
-	if (strcmp(argv[1], "-") != 0) {
-		FILE *from = fopen(argv[1], "r");
-		if ((!from && (err = FE_SYSTEM)) || (err = setjmp(jb))) {
+	parse_options(argc, argv);
+	if (options.input) {
+		FILE *from = fopen(options.input, "r");
+		if (!from) {
+			fprintf(stderr, "%s: Could not read file '%s': %s\n",
+				argv[0], options.input, strerror(errno));
+			exit(EXIT_FAILURE);
+		}
+		if ((err = setjmp(jb))) {
 			fprintf(stderr, "Error when reading: ");
 			file_error_print(err);
 			fprintf(stderr, "\n");
-			return err;
+			exit(EXIT_FAILURE);
 		}
 		world_read(&world, from, jb);
 		fclose(from);
 	} else {
-		world_init(&world, 100, 30, 300, time(NULL));
-		world_populate(&world, -1);
+		world_init(&world, options.width, options.height,
+			options.population, options.seed);
+		world_populate(&world, options.population);
 	}
-	to = fopen(argv[2], "w");
+	to = fopen(options.output, "w");
+	if (!to) {
+		fprintf(stderr, "%s: Could not write file '%s': %s\n",
+			argv[0], options.output, strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 	begin_graphics();
 	while (!sim_stopped()) {
 		next_frame(&world);
 		usleep(150000);
 	}
-	if ((!to && (err = FE_SYSTEM)) || (err = setjmp(jb))) {
+	if ((err = setjmp(jb))) {
 		end_graphics();
 		fprintf(stderr, "Error when writing: ");
 		file_error_print(err);
@@ -58,5 +69,5 @@ int main(int argc, char *argv[])
 	end_graphics();
 	world_destroy(&world);
 	fclose(to);
-	return err;
+	exit(0);
 }
