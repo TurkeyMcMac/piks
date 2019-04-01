@@ -1,5 +1,4 @@
 #include "cli.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -18,6 +17,9 @@ static const char help[] =
 "  -o <file>        Set the destination, where to write the world.\n"
 "  -p <population>  Set the population/number of species in the world.\n"
 "  -r <seed>        Set the random seed for the world.\n"
+"  -f <FPS>         Set the frames per second. The default is 30.\n"
+"  -G               Turn graphics on. This is the default.\n"
+"  -g               Turn graphics off. -f has no effect in this case.\n"
 "  -h               Print this help and exit.\n"
 "  -v               Print version information and exit.\n"
 " The options -W, -H, -p, and -r are only used if -i is not provided. With no\n"
@@ -25,7 +27,7 @@ static const char help[] =
 " If -o is not provided but -i is, the file specified by -i will also be\n"
 " written as the save location.\n"
 ;
-static const char version[] = "%s version 0.1.0\n";
+static const char version[] = "%s version 0.1.1\n";
 
 static unsigned long non_neg_arg(char *progname)
 {
@@ -60,6 +62,8 @@ static void error_not_set(char *progname, const char *what, char option)
 		progname, what, option, what);
 }
 
+#define FPS(fps) (1e6 / (fps))
+
 void parse_options(int argc, char *argv[]) {
 	bool failed = false;
 	bool width_set = false, height_set = false;
@@ -73,12 +77,17 @@ void parse_options(int argc, char *argv[]) {
 		"o:" // output
 		"p:" // population
 		"r:" // seed
+		"f:" // framerate
+		"G"  // graphics on
+		"g"  // graphics off
 		"h"  // help
 		"v"  // version
 	;
 	char *progname = argv[0];
 	int opt;
 	options.input = NULL;
+	options.frame_time = FPS(30);
+	options.do_graphics = true;
 	while ((opt = getopt(argc, argv, opts)) != -1) {
 		switch (opt) {
 		case 'W':
@@ -104,6 +113,15 @@ void parse_options(int argc, char *argv[]) {
 		case 'r':
 			options.seed = non_neg_arg(progname);
 			seed_set = true;
+			break;
+		case 'f':
+			options.frame_time = FPS(non_neg_arg(progname));
+			break;
+		case 'G':
+			options.do_graphics = true;
+			break;
+		case 'g':
+			options.do_graphics = false;
 			break;
 		case 'h':
 			printf(help, progname);

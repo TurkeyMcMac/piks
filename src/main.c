@@ -9,17 +9,6 @@
 #include <time.h>
 #include <unistd.h>
 
-static void next_frame(world_t *world)
-{
-	world_step(world);
-	for (size_t x = 0; x < world_width(world); ++x) {
-		for (size_t y = 0; y < world_height(world); ++y) {
-			draw_cell(world_get(world, x, y), x, y);
-		}
-	}
-	display_frame();
-}
-
 int main(int argc, char *argv[])
 {
 	jmp_buf jb;
@@ -55,8 +44,19 @@ int main(int argc, char *argv[])
 	}
 	begin_graphics();
 	while (!sim_stopped()) {
-		next_frame(&world);
-		usleep(150000);
+		world_step(&world);
+		if (options.do_graphics) {
+			for (size_t x = 0; x < world_width(&world); ++x) {
+				for (size_t y = 0;
+				     y < world_height(&world);
+				     ++y) {
+					draw_cell(
+						world_get(&world, x, y), x, y);
+				}
+			}
+			display_frame();
+			usleep(options.frame_time);
+		}
 	}
 	if ((err = setjmp(jb))) {
 		end_graphics();
