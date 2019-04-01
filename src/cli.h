@@ -9,6 +9,7 @@ extern struct options {
 	rand_t seed;
 	long frame_time;
 	bool do_graphics;
+	unsigned long save_interval;
 } options;
 
 void parse_options(int argc, char *argv[]);

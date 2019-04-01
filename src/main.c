@@ -9,8 +9,21 @@
 #include <time.h>
 #include <unistd.h>
 
+static void try_write(world_t *world, FILE *to, jmp_buf jb)
+{
+	int err;
+	if ((err = setjmp(jb))) {
+		fprintf(stderr, "Error when writing: ");
+		file_error_print(err);
+		fprintf(stderr, "\n");
+	} else {
+		world_write(world, to, jb);
+	}
+}
+
 int main(int argc, char *argv[])
 {
+	unsigned long tick = 0;
 	jmp_buf jb;
 	file_error_t err = FE_SUCCESS;
 	world_t world;
@@ -44,6 +57,11 @@ int main(int argc, char *argv[])
 	}
 	begin_graphics();
 	while (!sim_stopped()) {
+		++tick;
+		if (options.save_interval && tick % options.save_interval == 0)
+		{
+			try_write(&world, to, jb);
+		}
 		world_step(&world);
 		if (options.do_graphics) {
 			for (size_t x = 0; x < world_width(&world); ++x) {
@@ -58,14 +76,7 @@ int main(int argc, char *argv[])
 			usleep(options.frame_time);
 		}
 	}
-	if ((err = setjmp(jb))) {
-		end_graphics();
-		fprintf(stderr, "Error when writing: ");
-		file_error_print(err);
-		fprintf(stderr, "\n");
-	} else {
-		world_write(&world, to, jb);
-	}
+	try_write(&world, to, jb);
 	end_graphics();
 	world_destroy(&world);
 	fclose(to);
