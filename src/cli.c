@@ -136,6 +136,9 @@ void parse_options(int argc, char *argv[]) {
 		case 'v':
 			printf(version, progname);
 			exit(0);
+		default:
+			fprintf(stderr, help, progname);
+			exit(EXIT_FAILURE);
 		}
 	}
 	if (!input_set) {
