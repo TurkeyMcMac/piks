@@ -1,3 +1,6 @@
+#ifndef CLI_INCLUDED_
+#define CLI_INCLUDED_
+
 #include "random.h"
 #include <stddef.h>
 #include <stdbool.h>
@@ -13,3 +16,5 @@ extern struct options {
 } options;
 
 void parse_options(int argc, char *argv[]);
+
+#endif /* CLI_INCLUDED_ */
