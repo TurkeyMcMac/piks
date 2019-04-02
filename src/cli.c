@@ -24,10 +24,10 @@ static const char help[] =
 "                   the end. This is the default.\n"
 "  -h               Print this help and exit.\n"
 "  -v               Print version information and exit.\n"
-" The options -W, -H, -p, and -r are only used if -i is not provided. With no\n"
-" -i option, a new world is created rather than loading one from a file.\n"
-" If -o is not provided but -i is, the file specified by -i will also be\n"
-" written as the save location.\n"
+"The options -W, -H, -p, and -r are only used if -i is not provided. With no\n"
+"-i option, a new world is created rather than loading one from a file. If -o\n"
+"is not provided but -i is, the file specified by -i will also be written as\n"
+"the save location.\n"
 ;
 static const char version[] = "%s version 0.1.2\n";
 
