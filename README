@@ -10,3 +10,30 @@ configuration (there are 256.) A response can be one of the following:
  * Produce a baby. The cell in front must be alive, and the cell behind must be
    dead. The animal in front is consumed, while the cell behind has the baby put
    in it. The baby has a small chance of being a mutant, facilitating evolution.
+
+INTERFACE
+---------
+Usage: ./piks [options]
+
+Options:
+  -W <width>       Set the world width.
+  -H <height>      Set the world height.
+  -i <file>        Set the input world file.
+  -o <file>        Set the destination, where to write the world.
+  -p <population>  Set the population/number of species in the world.
+  -r <seed>        Set the random seed for the world.
+  -f <FPS>         Set the frames per second. The default is 30.
+  -G               Turn graphics on. This is the default.
+  -g               Turn graphics off. -f has no effect in this case.
+  -s <interval>    Save every <interval> ticks. 0 means no saving except at
+                   the end. This is the default.
+  -h               Print this help and exit.
+  -v               Print version information and exit.
+The options -W, -H, -p, and -r are only used if -i is not provided. With no -i
+option, a new world is created rather than loading one from a file. If -o is not
+provided but -i is, the file specified by -i will also be written as the save
+location.
+
+Runtime:
+The only action which can be taken at runtime currently is quitting. Press any
+key to save and exit.
