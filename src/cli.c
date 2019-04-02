@@ -88,6 +88,10 @@ void parse_options(int argc, char *argv[]) {
 	;
 	char *progname = argv[0];
 	int opt;
+	if (argc <= 1) {
+		fprintf(stderr, help, progname);
+		exit(EXIT_FAILURE);
+	}
 	options.input = NULL;
 	options.frame_time = FPS(30);
 	options.do_graphics = true;
