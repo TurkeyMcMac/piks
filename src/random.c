@@ -13,6 +13,8 @@ void scatter_init(scatter_t *scat, size_t limit, size_t count)
 {
 	if (count != 0) {
 		scat->division = limit / count;
+	} else {
+		scat->division = 0; // To satisfy -Wmaybe-uninitialized
 	}
 	scat->i = count;
 }
