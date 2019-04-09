@@ -158,13 +158,13 @@ void parse_options(int argc, char *argv[]) {
 			error_not_set(progname, "population", 'p');
 			failed = true;
 		}
-		error_not_set(progname, "input file", 'i');
 	}
 	if (!output_set) {
 		if (input_set) {
 			options.output = options.input;
 			output_set = true;
 		} else {
+			error_not_set(progname, "input file", 'i');
 			error_not_set(progname, "output file", 'o');
 			failed = true;
 		}
