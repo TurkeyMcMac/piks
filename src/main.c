@@ -10,12 +10,12 @@
 #include <time.h>
 #include <unistd.h>
 
-static int try_read(world_t *world, FILE *from)
+static int try_read(char *progname, world_t *world, FILE *from)
 {
 	jmp_buf jb;
 	int err;
 	if ((err = setjmp(jb))) {
-		fprintf(stderr, "Error when reading: ");
+		fprintf(stderr, "%s: Error when reading: ", progname);
 		file_error_print(err);
 		fprintf(stderr, "\n");
 		return err;
@@ -25,12 +25,12 @@ static int try_read(world_t *world, FILE *from)
 	}
 }
 
-static int try_write(world_t *world, FILE *to)
+static int try_write(char *progname, world_t *world, FILE *to)
 {
 	jmp_buf jb;
 	int err;
 	if ((err = setjmp(jb))) {
-		fprintf(stderr, "Error when writing: ");
+		fprintf(stderr, "%s: Error when writing: ", progname);
 		file_error_print(err);
 		fprintf(stderr, "\n");
 		return err;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 				argv[0], options.input, strerror(errno));
 			exit(EXIT_FAILURE);
 		}
-		if (try_read(&world, from)) exit(EXIT_FAILURE);
+		if (try_read(argv[0], &world, from)) exit(EXIT_FAILURE);
 		fclose(from);
 	} else {
 		world_init(&world, options.width, options.height,
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 		++tick;
 		if (options.save_interval && tick % options.save_interval == 0)
 		{
-			try_write(&world, to);
+			try_write(argv[0], &world, to);
 		}
 		world_step(&world);
 		if (options.do_graphics) {
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 			usleep(options.frame_time);
 		}
 	}
-	try_write(&world, to);
+	try_write(argv[0], &world, to);
 	end_graphics();
 	world_destroy(&world);
 	fclose(to);
