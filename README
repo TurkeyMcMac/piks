@@ -25,9 +25,8 @@ Options:
   -f <FPS>         Set the frames per second. The default is 30.
   -G               Turn graphics on. This is the default.
   -g               Turn graphics off. -f has no effect in this case.
-  -I               Print world info (width, height, population, version) and
-                   exit. All this information must be determinable by other
-                   options such as -i, -W, etc.
+  -I               Print world info and exit. All this information must be
+                   determinable by other options such as -i, -W, etc.
   -s <interval>    Save every <interval> ticks. 0 means no saving except at
                    the end. This is the default.
   -h               Print this help and exit.
