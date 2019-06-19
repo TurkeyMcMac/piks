@@ -20,6 +20,9 @@ static const char help[] =
 "  -f <FPS>         Set the frames per second. The default is 30.\n"
 "  -G               Turn graphics on. This is the default.\n"
 "  -g               Turn graphics off. -f has no effect in this case.\n"
+"  -I               Print world info (width, height, population, version) and\n"
+"                   exit. All this information must be determinable by other\n"
+"                   options such as -i, -W, etc.\n"
 "  -s <interval>    Save every <interval> ticks. 0 means no saving except at\n"
 "                   the end. This is the default.\n"
 "  -h               Print this help and exit.\n"
@@ -29,7 +32,7 @@ static const char help[] =
 "is not provided but -i is, the file specified by -i will also be written as\n"
 "the save location.\n"
 ;
-static const char version[] = "%s version 0.1.2\n";
+static const char version[] = "%s version 0.2.2\n";
 
 static unsigned long non_neg_arg(char *progname)
 {
@@ -83,6 +86,7 @@ void parse_options(int argc, char *argv[]) {
 		"G"  // graphics on
 		"g"  // graphics off
 		"s:" // save interval
+		"I"  // just print world info
 		"h"  // help
 		"v"  // version
 	;
@@ -95,6 +99,7 @@ void parse_options(int argc, char *argv[]) {
 	options.input = NULL;
 	options.frame_time = FPS(30);
 	options.do_graphics = true;
+	options.print_info = false;
 	options.save_interval = 0;
 	while ((opt = getopt(argc, argv, opts)) != -1) {
 		switch (opt) {
@@ -134,6 +139,9 @@ void parse_options(int argc, char *argv[]) {
 		case 's':
 			options.save_interval = non_neg_arg(progname);
 			break;
+		case 'I':
+			options.print_info = true;
+			break;
 		case 'h':
 			printf(help, progname);
 			exit(0);
@@ -159,12 +167,17 @@ void parse_options(int argc, char *argv[]) {
 			failed = true;
 		}
 	}
-	if (!output_set) {
+	if (options.print_info) {
+		if (failed) {
+			error_not_set(progname, "input file", 'i');
+			failed = true;
+		}
+	} else if (!output_set) {
 		if (input_set) {
 			options.output = options.input;
 			output_set = true;
 		} else {
-			error_not_set(progname, "input file", 'i');
+			if (failed) error_not_set(progname, "input file", 'i');
 			error_not_set(progname, "output file", 'o');
 			failed = true;
 		}

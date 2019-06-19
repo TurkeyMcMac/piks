@@ -44,6 +44,17 @@ animal_t *world_get(world_t *world, size_t x, size_t y)
 	return &world->cells[y * world->width + x];
 }
 
+size_t world_population(world_t *world)
+{
+	size_t count = 0;
+	genome_t *gnm;
+	size_t id = 0;
+	while ((gnm = genome_pool_get(&world->genomes, id++))) {
+		count += gnm->refcnt;
+	}
+	return count;
+}
+
 /* Animal flags format:
  * 0WWW0000MWWW00TT
  * M = moved this step?

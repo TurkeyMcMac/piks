@@ -12,6 +12,7 @@ extern struct options {
 	rand_t seed;
 	long frame_time;
 	bool do_graphics;
+	bool print_info;
 	unsigned long save_interval;
 } options;
 

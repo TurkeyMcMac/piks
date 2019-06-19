@@ -59,6 +59,21 @@ int main(int argc, char *argv[])
 			options.population, options.seed);
 		world_populate(&world, options.population);
 	}
+	if (options.print_info) {
+		printf(	"Format-version: %lu\n"
+			"Width: %lu\n"
+			"Height: %lu\n"
+			"Population: %lu\n"
+			"Random-state: %u\n"
+			,
+			(unsigned long)FILE_FORMAT_VERSION,
+			world_width(&world),
+			world_height(&world),
+			world_population(&world),
+			world_random_state(&world));
+		world_destroy(&world);
+		exit(0);
+	}
 	to = fopen(options.output, "w");
 	if (!to) {
 		fprintf(stderr, "%s: Could not write file '%s': %s\n",

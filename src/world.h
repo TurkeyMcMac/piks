@@ -29,6 +29,9 @@ animal_t *world_get(world_t *world, size_t x, size_t y);
 
 #define world_width(world) ((world)->width)
 #define world_height(world) ((world)->height)
+#define world_random_state(world) ((world)->rand)
+
+size_t world_population(world_t *world);
 
 void world_step(world_t *world);
 
