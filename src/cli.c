@@ -20,9 +20,8 @@ static const char help[] =
 "  -f <FPS>         Set the frames per second. The default is 30.\n"
 "  -G               Turn graphics on. This is the default.\n"
 "  -g               Turn graphics off. -f has no effect in this case.\n"
-"  -I               Print world info (width, height, population, version) and\n"
-"                   exit. All this information must be determinable by other\n"
-"                   options such as -i, -W, etc.\n"
+"  -I               Print world info and exit. All this information must be \n"
+"                   determinable by other options such as -i, -W, etc.\n"
 "  -s <interval>    Save every <interval> ticks. 0 means no saving except at\n"
 "                   the end. This is the default.\n"
 "  -h               Print this help and exit.\n"
@@ -32,7 +31,7 @@ static const char help[] =
 "is not provided but -i is, the file specified by -i will also be written as\n"
 "the save location.\n"
 ;
-static const char version[] = "%s version 0.3.2\n";
+static const char version[] = "%s version 0.3.3\n";
 
 static unsigned long non_neg_arg(char *progname)
 {
