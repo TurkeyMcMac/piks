@@ -28,6 +28,27 @@ size_t genome_pool_get_count(const genome_pool_t *pool)
 	return pool->size;
 }
 
+static genome_t *search_genome(genome_pool_t *pool, size_t id)
+{
+	while (id < pool->size && pool->slots[id].refcnt <= 0) {
+		++id;
+	}
+	if (id >= pool->size) return NULL;
+	return &pool->slots[id];
+}
+
+genome_t *genome_pool_first_alive(genome_pool_t *pool)
+{
+	return search_genome(pool, 0);
+}
+
+genome_t *genome_next_alive(genome_t *gnm)
+{
+	if (!gnm) return NULL;
+	return search_genome(gnm->link.pool, genome_get_id(gnm) + 1);
+}
+
+
 action_t genome_get(const genome_t *gnm, input_t input)
 {
 	uint8_t byte, quart;

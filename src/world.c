@@ -47,10 +47,21 @@ animal_t *world_get(world_t *world, size_t x, size_t y)
 size_t world_population(world_t *world)
 {
 	size_t count = 0;
-	genome_t *gnm;
-	size_t id = 0;
-	while ((gnm = genome_pool_get(&world->genomes, id++))) {
-		count += gnm->refcnt;
+	for (genome_t *gnm = world_first_alive(world);
+	     gnm;
+	     gnm = genome_next_alive(gnm)) {
+		count += genome_population(gnm);
+	}
+	return count;
+}
+
+size_t world_count_species(world_t *world)
+{
+	size_t count = 0;
+	for (genome_t *gnm = world_first_alive(world);
+	     gnm;
+	     gnm = genome_next_alive(gnm)) {
+		++count;
 	}
 	return count;
 }

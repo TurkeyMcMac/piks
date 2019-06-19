@@ -40,6 +40,16 @@ static int try_write(char *progname, world_t *world, FILE *to)
 	}
 }
 
+static void print_genome(genome_t *gnm)
+{
+	printf("ID:%5ld, Population:%5zu, Sequence: ",
+		genome_get_id(gnm), genome_population(gnm));
+	uint8_t *seq = genome_bytes(gnm);
+	for (size_t i = 0; i < genome_length(gnm); ++i) {
+		printf("%02X", seq[i]);
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	unsigned long tick = 0;
@@ -66,12 +76,21 @@ int main(int argc, char *argv[])
 			"Height: %zu\n"
 			"Population: %zu\n"
 			"Random-state: %"PRIu32"\n"
+			"Species: %zu\n"
 			,
 			(unsigned long)FILE_FORMAT_VERSION,
 			world_width(&world),
 			world_height(&world),
 			world_population(&world),
-			world_random_state(&world));
+			world_random_state(&world),
+			world_count_species(&world));
+		for (genome_t *gnm = world_first_alive(&world);
+		     gnm;
+		     gnm = genome_next_alive(gnm)) {
+			putchar('\t');
+			print_genome(gnm);
+			putchar('\n');
+		}
 		world_destroy(&world);
 		exit(0);
 	}
