@@ -3,6 +3,7 @@
 #include "file.h"
 #include "cli.h"
 #include <errno.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,10 +62,10 @@ int main(int argc, char *argv[])
 	}
 	if (options.print_info) {
 		printf(	"Format-version: %lu\n"
-			"Width: %lu\n"
-			"Height: %lu\n"
-			"Population: %lu\n"
-			"Random-state: %u\n"
+			"Width: %zu\n"
+			"Height: %zu\n"
+			"Population: %zu\n"
+			"Random-state: %"PRIu32"\n"
 			,
 			(unsigned long)FILE_FORMAT_VERSION,
 			world_width(&world),
