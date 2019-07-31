@@ -1,6 +1,6 @@
 exe = piks
 
-c-flags = -std=c99 -O3 -Wall -Wextra -flto $(CFLAGS)
+c-flags = -std=c99 -O3 -D_POSIX_C_SOURCE=2 -Wall -Wextra -flto $(CFLAGS)
 
 all: $(exe)
 
