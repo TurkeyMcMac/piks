@@ -27,7 +27,6 @@ bool animal_is_null(const animal_t *an)
 void animal_mutant(animal_t *src, animal_t *dst, rand_t *seed)
 {
 	genome_t *mut = genome_mutant(src->genome, seed);
-	genome_inc(mut);
 	animal_init(dst, mut, src->direction);
 }
 
