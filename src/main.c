@@ -104,7 +104,8 @@ int main(int argc, char *argv[])
 	begin_graphics();
 	ticker_t ticker;
 	ticker_init(&ticker, options.frame_time);
-	while (!sim_stopped()) {
+	while (!sim_stopped()
+	    && !(options.is_finite && tick >= options.stopping_point)) {
 		++tick;
 		if (options.save_interval && tick % options.save_interval == 0)
 		{

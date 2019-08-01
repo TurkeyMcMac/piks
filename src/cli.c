@@ -20,10 +20,11 @@ static const char help[] =
 "  -f <FPS>         Set the frames per second. The default is 30.\n"
 "  -G               Turn graphics on. This is the default.\n"
 "  -g               Turn graphics off. -f has no effect in this case.\n"
-"  -I               Print world info and exit. All this information must be \n"
+"  -I               Print world info and exit. All this information must be\n"
 "                   determinable by other options such as -i, -W, etc.\n"
 "  -s <interval>    Save every <interval> ticks. 0 means no saving except at\n"
 "                   the end. This is the default.\n"
+"  -S <ticks>       Stop and save after <ticks> ticks.\n"
 "  -h               Print this help and exit.\n"
 "  -v               Print version information and exit.\n"
 "The options -W, -H, -p, and -r are only used if -i is not provided. With no\n"
@@ -31,7 +32,7 @@ static const char help[] =
 "is not provided but -i is, the file specified by -i will also be written as\n"
 "the save location.\n"
 ;
-static const char version[] = "%s version 0.4.3\n";
+static const char version[] = "%s version 0.5.3\n";
 
 static unsigned long non_neg_arg(char *progname)
 {
@@ -85,6 +86,7 @@ void parse_options(int argc, char *argv[]) {
 		"G"  // graphics on
 		"g"  // graphics off
 		"s:" // save interval
+		"S:" // Stopping point
 		"I"  // just print world info
 		"h"  // help
 		"v"  // version
@@ -100,6 +102,7 @@ void parse_options(int argc, char *argv[]) {
 	options.do_graphics = true;
 	options.print_info = false;
 	options.save_interval = 0;
+	options.is_finite = false;
 	while ((opt = getopt(argc, argv, opts)) != -1) {
 		switch (opt) {
 		case 'W':
@@ -137,6 +140,10 @@ void parse_options(int argc, char *argv[]) {
 			break;
 		case 's':
 			options.save_interval = non_neg_arg(progname);
+			break;
+		case 'S':
+			options.is_finite = true;
+			options.stopping_point = non_neg_arg(progname);
 			break;
 		case 'I':
 			options.print_info = true;

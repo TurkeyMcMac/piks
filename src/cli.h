@@ -14,6 +14,8 @@ extern struct options {
 	bool do_graphics;
 	bool print_info;
 	unsigned long save_interval;
+	unsigned long stopping_point;
+	bool is_finite;
 } options;
 
 void parse_options(int argc, char *argv[]);
