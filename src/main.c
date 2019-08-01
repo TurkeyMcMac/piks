@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "file.h"
 #include "cli.h"
+#include "ticker.h"
 #include <errno.h>
 #include <inttypes.h>
 #include <stdio.h>
@@ -101,6 +102,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	begin_graphics();
+	ticker_t ticker;
+	ticker_init(&ticker, options.frame_time);
 	while (!sim_stopped()) {
 		++tick;
 		if (options.save_interval && tick % options.save_interval == 0)
@@ -118,7 +121,7 @@ int main(int argc, char *argv[])
 				}
 			}
 			display_frame();
-			usleep(options.frame_time);
+			ticker_step(&ticker);
 		}
 	}
 	try_write(argv[0], &world, to);
