@@ -1,7 +1,7 @@
 exe = piks
 bin-dir = /usr/local/bin
 
-c-flags = -std=c99 -O3 -D_POSIX_C_SOURCE=200112 -Wall -Wextra -flto $(CFLAGS)
+c-flags = -std=c99 -Wall -Wextra -D_POSIX_C_SOURCE=200112 $(CFLAGS)
 
 all: $(exe)
 
