@@ -32,7 +32,7 @@ static const char help[] =
 "is not provided but -i is, the file specified by -i will also be written as\n"
 "the save location.\n"
 ;
-static const char version[] = "%s version 0.5.3\n";
+static const char version[] = "%s version 0.5.4\n";
 
 static unsigned long non_neg_arg(char *progname)
 {

@@ -26,19 +26,27 @@ static int try_read(char *progname, world_t *world, FILE *from)
 	}
 }
 
-static int try_write(char *progname, world_t *world, FILE *to)
+static int try_write(char *progname, world_t *world)
 {
 	jmp_buf jb;
 	int err;
-	if ((err = setjmp(jb))) {
+	FILE *to = fopen(options.output, "w");
+	if (!to) {
+		fprintf(stderr, "%s: Could not write file '%s': %s\n",
+			progname, options.output, strerror(errno));
+		err = FE_SYSTEM;
+	} else if ((err = setjmp(jb)) == 0) {
+		world_write(world, to, jb);
+	}
+	if (err) {
+		int errnum = errno;
 		fprintf(stderr, "%s: Error when writing: ", progname);
+		errno = errnum;
 		file_error_print(err);
 		fprintf(stderr, "\n");
-		return err;
-	} else {
-		world_write(world, to, jb);
-		return 0;
 	}
+	fclose(to);
+	return err;
 }
 
 static void print_genome(genome_t *gnm)
@@ -56,7 +64,6 @@ int main(int argc, char *argv[])
 {
 	unsigned long tick = 0;
 	world_t world;
-	FILE *to;
 	parse_options(argc, argv);
 	if (options.input) {
 		FILE *from = fopen(options.input, "r");
@@ -95,12 +102,6 @@ int main(int argc, char *argv[])
 		world_destroy(&world);
 		exit(0);
 	}
-	to = fopen(options.output, "w");
-	if (!to) {
-		fprintf(stderr, "%s: Could not write file '%s': %s\n",
-			argv[0], options.output, strerror(errno));
-		exit(EXIT_FAILURE);
-	}
 	begin_graphics();
 	ticker_t ticker;
 	ticker_init(&ticker, options.frame_time);
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
 		++tick;
 		if (options.save_interval && tick % options.save_interval == 0)
 		{
-			try_write(argv[0], &world, to);
+			try_write(argv[0], &world);
 		}
 		world_step(&world);
 		if (options.do_graphics) {
@@ -125,9 +126,8 @@ int main(int argc, char *argv[])
 			ticker_step(&ticker);
 		}
 	}
-	try_write(argv[0], &world, to);
+	try_write(argv[0], &world);
 	end_graphics();
 	world_destroy(&world);
-	fclose(to);
 	exit(0);
 }
