@@ -34,11 +34,11 @@ static int try_write(char *progname, world_t *world)
 	if (!to) {
 		fprintf(stderr, "%s: Could not write file '%s': %s\n",
 			progname, options.output, strerror(errno));
-		err = FE_SYSTEM;
-	} else if ((err = setjmp(jb)) == 0) {
-		world_write(world, to, jb);
+		return FE_SYSTEM;
 	}
-	if (err) {
+	if ((err = setjmp(jb)) == 0) {
+		world_write(world, to, jb);
+	} else {
 		int errnum = errno;
 		fprintf(stderr, "%s: Error when writing: ", progname);
 		errno = errnum;
@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 	begin_graphics();
+	atexit(end_graphics);
 	ticker_t ticker;
 	ticker_init(&ticker, options.frame_time);
 	while (!sim_stopped()
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
 		++tick;
 		if (options.save_interval && tick % options.save_interval == 0)
 		{
-			try_write(argv[0], &world);
+			if (try_write(argv[0], &world)) exit(EXIT_FAILURE);
 		}
 		world_step(&world);
 		if (options.do_graphics) {
@@ -126,8 +127,7 @@ int main(int argc, char *argv[])
 			ticker_step(&ticker);
 		}
 	}
-	try_write(argv[0], &world);
-	end_graphics();
+	if (try_write(argv[0], &world)) exit(EXIT_FAILURE);
 	world_destroy(&world);
 	exit(0);
 }
