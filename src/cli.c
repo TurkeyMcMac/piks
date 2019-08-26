@@ -53,7 +53,7 @@ static unsigned long non_neg_arg(char *progname)
 			progname);
 		exit(EXIT_FAILURE);
 	}
-	if (parsed > UINT32_MAX) {
+	if ((unsigned long)parsed > UINT32_MAX) {
 		fprintf(stderr, "%s: Number must be less than %lu\n",
 			progname, (unsigned long)UINT32_MAX);
 		exit(EXIT_FAILURE);

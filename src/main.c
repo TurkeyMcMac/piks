@@ -51,7 +51,7 @@ static int try_write(char *progname, world_t *world)
 
 static void print_genome(genome_t *gnm)
 {
-	printf("%5ld  %10zu  ",
+	printf("%5zu  %10ld  ",
 		genome_get_id(gnm), genome_population(gnm));
 	uint8_t *seq = genome_bytes(gnm);
 	for (size_t i = 0; i < genome_length(gnm); ++i) {
