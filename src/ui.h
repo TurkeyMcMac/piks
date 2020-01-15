@@ -5,9 +5,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-void begin_graphics(void);
+void begin_ui(bool do_graphics);
 
-void end_graphics(void);
+void end_ui(void);
 
 bool sim_stopped(void);
 

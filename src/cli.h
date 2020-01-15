@@ -11,7 +11,7 @@ extern struct options {
 	size_t population;
 	rand_t seed;
 	long frame_time;
-	bool do_graphics;
+	bool do_ui;
 	bool print_info;
 	unsigned long save_interval;
 	unsigned long stopping_point;

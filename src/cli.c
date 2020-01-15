@@ -32,7 +32,7 @@ static const char help[] =
 "is not provided but -i is, the file specified by -i will also be written as\n"
 "the save location.\n"
 ;
-static const char version[] = "%s version 0.5.5\n";
+static const char version[] = "%s version 0.5.6\n";
 
 static unsigned long non_neg_arg(char *progname)
 {
@@ -99,7 +99,7 @@ void parse_options(int argc, char *argv[]) {
 	}
 	options.input = NULL;
 	options.frame_time = FPS(30);
-	options.do_graphics = true;
+	options.do_ui = true;
 	options.print_info = false;
 	options.save_interval = 0;
 	options.is_finite = false;
@@ -133,10 +133,10 @@ void parse_options(int argc, char *argv[]) {
 			options.frame_time = FPS(non_neg_arg(progname));
 			break;
 		case 'G':
-			options.do_graphics = true;
+			options.do_ui = true;
 			break;
 		case 'g':
-			options.do_graphics = false;
+			options.do_ui = false;
 			break;
 		case 's':
 			options.save_interval = non_neg_arg(progname);

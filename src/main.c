@@ -1,5 +1,5 @@
 #include "world.h"
-#include "graphics.h"
+#include "ui.h"
 #include "file.h"
 #include "cli.h"
 #include "ticker.h"
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 		world_destroy(&world);
 		exit(0);
 	}
-	begin_graphics();
-	atexit(end_graphics);
+	begin_ui(options.do_ui);
+	atexit(end_ui);
 	ticker_t ticker;
 	ticker_init(&ticker, options.frame_time);
 	while (!sim_stopped()
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 			if (try_write(argv[0], &world)) exit(EXIT_FAILURE);
 		}
 		world_step(&world);
-		if (options.do_graphics) {
+		if (options.do_ui) {
 			for (size_t x = 0; x < world_width(&world); ++x) {
 				for (size_t y = 0;
 				     y < world_height(&world);
