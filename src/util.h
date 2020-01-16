@@ -8,7 +8,12 @@
 	uint##bits##_t rotright##bits(uint##bits##_t num, signed amt) \
 	{ \
 		unsigned amount = (unsigned)amt % bits;	\
-		return (num >> amount) | (num << (bits - amount)); \
+		if (amount) { \
+			return (num >> amount) | (num << (bits - amount)); \
+		} else { \
+			/* If amount == 0, num << (bits - amount) is undefined. */ \
+			return num; \
+		} \
 	} struct rotright##bits##_requires_semicolon_
 
 ROTRIGHT_FUN(8);
