@@ -1,0 +1,95 @@
+.TH piks 6 "15 Jan. 2020" "version @@VERSION@@"
+
+
+.SH NAME
+\fBpiks\fR - Run the evolution simulator piks
+
+
+.SH SYNOPSIS
+\fBpiks\fR [\fIoptions\fR]
+
+
+.SH DESCRIPTION
+
+\fBpiks\fR is an evolving life simulator.  Each animal, a "pik" or whatever, has
+a direction as its state. It senses which of the eight cells around are alive,
+like in Conway's Game of Life. Each animal also contains a pointer to a genome,
+a table of the responses to each possible configuration (there are 256.) A
+response can be one of the following:
+.IP \[bu]
+Move forward. This works only if the cell in front is empty.
+.IP \[bu]
+Turn right or left.
+.IP \[bu]
+Produce a baby. The cell in front must be alive, and the cell behind must be
+dead. The animal in front is consumed, while the cell behind has the baby put in
+it. The baby has a small chance of being a mutant, facilitating evolution.
+
+.P
+
+After starting the game, quit by pressing any key. If you are using
+non-graphical mode and said key was not ENTER, press ENTER afterward. In any
+case, the world will be saved upon quitting.
+
+
+.SH OPTIONS
+
+.IP "\fB-W\fR \fIwidth\fR"
+Set the world width.
+
+.IP "\fB-H\fR \fIheight\fR"
+Set the world height.
+
+.IP "\fB-i\fR \fIfile\fR"
+Set the input world file.
+
+.IP "\fB-o\fR \fIfile\fR"
+Set the destination, where to write the world.
+
+.IP "\fB-p\fR \fIpopulation\fR"
+Set the population/number of species in the world.
+
+.IP "\fB-r\fR \fIseed\fR"
+Set the random seed for the world.
+
+.IP "\fB-f\fR \fIFPS\fR"
+Set the frames per second. The default is 30.
+
+.IP \fB-G\fR
+Turn graphics on. This is the default.
+
+.IP \fB-g\fR
+Turn graphics off. -f has no effect in this case.
+
+.IP \fB-I\fR
+Print world info and exit. All this information must be determinable by other
+options such as \fB-i\fR, \fB-W\fR, etc.
+
+.IP "\fB-s\fR \fIinterval\fR"
+Save every \fIinterval\fR ticks. 0 means no saving except at the end. This is
+the default.
+
+.IP "\fB-S\fR \fIticks\fR"
+Stop and save after <ticks> ticks.
+.IP "\fB-h\fR"
+Print this help and exit.
+
+.IP "\fB-v\fR"
+Print version information and exit.
+
+.P
+
+The options \fB-W\fR, \fB-H\fR, \fB-p\fR, and \fB-r\fR are only used if \fB-i\fR
+is not provided. With no \fB-i\fR option, a new world is created rather than
+loading one from a file. If \fB-o\fR is not provided but \fB-i\fR is, the file
+specified by \fB-i\fR will also be written as the save location.
+
+
+.SH EXIT STATUS
+
+\fBpiks\fR exits with 0 on success or a non-zero value on any failure.
+
+
+.SH AUTHOR
+
+Written by Jude Melton-Houghton (jwmhjwmh@gmail.com).
