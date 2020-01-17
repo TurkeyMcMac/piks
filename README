@@ -40,3 +40,9 @@ the save location.
 Runtime:
 The only action which can be taken at runtime currently is quitting. Press any
 key to save and exit.
+
+VERSION CHANGE
+--------------
+I have added a script '1to2' to convert worlds from version 1 to version 2.
+Invoke it like './1to2 < 1.piks > 2.piks'. Make sure to provide a different name
+for the version 2 world, as otherwise you will end up with an empty world file.

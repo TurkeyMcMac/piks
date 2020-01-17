@@ -5,13 +5,17 @@
 
 void read_file_header(FILE *from, jmp_buf jb)
 {
-	if (read_32(from, jb) != FILE_FORMAT_VERSION)
+	char found_header[FILE_HEADER_SIZE];
+	if (fread(found_header, sizeof(found_header), 1, from) != 1)
+		longjmp(jb, feof(from) ? FE_UNEXPECTED_EOF : FE_SYSTEM);
+	if (memcmp(FILE_HEADER, found_header, FILE_HEADER_SIZE))
 		longjmp(jb, FE_INVALID_FORMAT);
 }
 
 void write_file_header(FILE *to, jmp_buf jb)
 {
-	write_32(FILE_FORMAT_VERSION, to, jb);
+	if (fwrite(FILE_HEADER, FILE_HEADER_SIZE, 1, to) != 1)
+		longjmp(jb, FE_SYSTEM);
 }
 
 uint32_t read_32(FILE *from, jmp_buf jb)

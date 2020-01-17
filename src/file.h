@@ -5,7 +5,9 @@
 #include <setjmp.h>
 #include <stdint.h>
 
-#define FILE_FORMAT_VERSION 1
+#define FILE_HEADER "\0piks world\0\x00\x00\x00\x02"
+#define FILE_HEADER_SIZE 16
+#define FILE_FORMAT_VERSION 2 // Must match 4 bytes at end of FILE_HEADER
 
 typedef enum {
 	FE_SUCCESS = 0,
