@@ -46,3 +46,15 @@ VERSION CHANGE
 I have added a script '1to2' to convert worlds from version 1 to version 2.
 Invoke it like './1to2 < 1.piks > 2.piks'. Make sure to provide a different name
 for the version 2 world, as otherwise you will end up with an empty world file.
+
+MAGIC FILE
+----------
+I have added a file to describe piks worlds to the file(1) command. I don't know
+how to install it, which is a problem. What seems to work for me is to do as
+follows:
+
+  file -C -m magic.txt && mv magic.txt.mgc ~/.magic.mgc
+
+That assumes you have no ~/.magic.mgc file to begin with. Now file(1) will
+recognize piks worlds along with everything else. However, this approach is
+not scalable.

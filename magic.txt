@@ -1,0 +1,6 @@
+# This is a magic file describing the format of a Piks world, for use with the
+# file(1) command. This also prints the version of the world. It recognizes
+# files of version 2 or above.
+
+0	string	\0piks\ world\0
+>12	belong	x	Piks world, version %u
