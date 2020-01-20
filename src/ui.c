@@ -1,12 +1,20 @@
 #include "ui.h"
 #include <curses.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <unistd.h>
 
 #define NULL_PAIR 1
 #define ANIMAL_PAIR 2
 
 static bool use_graphics;
+
+static volatile sig_atomic_t stop_signalled = false;
+static void stop_signal_handler(int s)
+{
+	(void)s;
+	stop_signalled = true;
+}
 
 void begin_ui(bool do_graphics)
 {
@@ -20,6 +28,9 @@ void begin_ui(bool do_graphics)
 	} else {
 		fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 	}
+	struct sigaction sa = { .sa_handler = stop_signal_handler };
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGTERM, &sa, NULL);
 }
 
 void end_ui(void)
@@ -29,7 +40,9 @@ void end_ui(void)
 
 bool sim_stopped(void)
 {
-	if (use_graphics) {
+	if (stop_signalled) {
+		return true;
+	} else if (use_graphics) {
 		return getch() != ERR;
 	} else {
 		char buf[1];
