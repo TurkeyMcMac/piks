@@ -9,7 +9,7 @@ c-flags = -std=c99 -Wall -Wextra -D_POSIX_C_SOURCE=200112 \
 all: $(exe) $(man)
 
 $(exe): src version
-	$(CC) $(c-flags) -o $@ src/*.c -lncurses
+	$(CC) $(c-flags) -o $@ src/*.c -lcurses
 
 $(man): piks.6.in version
 	sed "s/@@VERSION@@/`cat version`/g" piks.6.in > $@
