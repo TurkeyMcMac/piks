@@ -9,7 +9,8 @@ configuration (there are 256.) A response can be one of the following:
  * Turn right or left.
  * Produce a baby. The cell in front must be alive, and the cell behind must be
    dead. The animal in front is consumed, while the cell behind has the baby put
-   in it. The baby has a small chance of being a mutant, facilitating evolution.
+   in it facing the direction opposite to the parent's. The baby has a small
+   chance of being a mutant, facilitating evolution.
 
 INTERFACE
 ---------
