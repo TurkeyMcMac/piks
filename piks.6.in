@@ -59,7 +59,7 @@ Set the frames per second. The default is 30.
 Turn graphics on. This is the default.
 
 .IP \fB-g\fR
-Turn graphics off. -f has no effect in this case.
+Turn graphics off. \fB-f\fR has no effect in this case.
 
 .IP \fB-I\fR
 Print world info and exit. All this information must be determinable by other
