@@ -233,10 +233,6 @@ static void carry_out_action(world_t *world, size_t x, size_t y)
 	uint16_t flags = *animal_flags(an);
 	if (animal_is_null(an) || TYPE_GET(flags) == UA_NONE || flags & MOVED)
 		return;
-	if (flags & MOVED) {
-		*animal_flags(an) &= ~MOVED;
-		return;
-	}
 	direction_t dir = animal_get_direction(an);
 	animal_t *targ, *place;
 	targ = get_wrapped(world, x, y, WRAPPING_GET(flags), dir);
@@ -245,6 +241,7 @@ static void carry_out_action(world_t *world, size_t x, size_t y)
 		if (animal_is_null(targ)) {
 			*targ = *an;
 			animal_null(an);
+			*animal_flags(targ) |= MOVED;
 		}
 		break;
 	case UA_BABY:
@@ -257,10 +254,7 @@ static void carry_out_action(world_t *world, size_t x, size_t y)
 			*animal_flags(place) |= MOVED;
 		}
 		break;
-	default: return;
 	}
-	*animal_flags(targ) |= MOVED;
-
 }
 
 static void carry_out_actions(world_t *world)
