@@ -10,6 +10,8 @@ int world_init(world_t *world,
 	rand_t seed)
 {
 	genome_pool_init(&world->genomes, genomes);
+	assert(width >= 2);
+	assert(height >= 2);
 	world->width = width;
 	world->height = height;
 	world->rand = seed;

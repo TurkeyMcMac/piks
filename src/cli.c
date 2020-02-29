@@ -107,10 +107,20 @@ void parse_options(int argc, char *argv[]) {
 		switch (opt) {
 		case 'W':
 			options.width = non_neg_arg(progname);
+			if (options.width < 2) {
+				fprintf(stderr, "%s: -W must be 2 or above\n",
+					progname);
+				exit(EXIT_FAILURE);
+			}
 			width_set = true;
 			break;
 		case 'H':
 			options.height = non_neg_arg(progname);
+			if (options.height < 2) {
+				fprintf(stderr, "%s: -H must be 2 or above\n",
+					progname);
+				exit(EXIT_FAILURE);
+			}
 			height_set = true;
 			break;
 		case 'i':
