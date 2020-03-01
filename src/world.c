@@ -29,8 +29,10 @@ void world_destroy(world_t *world)
 void world_populate(world_t *world, size_t pop)
 {
 	scatter_t scat; 
+	size_t n_tiles = world->width * world->height;
 	if (pop == (size_t)-1) pop = genome_pool_get_count(&world->genomes);
-	scatter_init(&scat, world->width * world->height, pop);
+	if (pop > n_tiles) pop = n_tiles;
+	scatter_init(&scat, n_tiles, pop);
 	while (scatter_has_next(&scat)) {
 		size_t i = scatter_next(&scat, &world->rand);
 		genome_t *gnm = genome_random(&world->genomes, &world->rand);
