@@ -335,4 +335,6 @@ void world_write(const world_t *world, FILE *to, jmp_buf jb)
 			animal_write(&world->cells[i], to, jb);
 		}
 	}
+	if (null_streak >= 0 && fputc(null_streak, to) == EOF)
+		longjmp(jb, FE_SYSTEM);
 }
