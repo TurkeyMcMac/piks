@@ -4,9 +4,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-#define NULL_PAIR 1
-#define ANIMAL_PAIR 2
-
 static bool use_graphics;
 
 static volatile sig_atomic_t stop_signalled = false;
@@ -21,9 +18,6 @@ void begin_ui(bool do_graphics)
 	use_graphics = do_graphics;
 	if (use_graphics) {
 		initscr();
-		start_color();
-		init_pair(NULL_PAIR, COLOR_BLACK, COLOR_BLUE);
-		init_pair(ANIMAL_PAIR, COLOR_RED, COLOR_WHITE);
 		nodelay(stdscr, true);
 	} else {
 		fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
@@ -52,11 +46,7 @@ bool sim_stopped(void)
 
 static void draw_null(size_t x, size_t y)
 {
-	if (has_colors()) {
-		attron(COLOR_PAIR(NULL_PAIR));
-		mvaddch(y, x, '#');
-		attroff(COLOR_PAIR(NULL_PAIR));
-	}
+	mvaddch(y, x, '`');
 }
 
 static void draw_animal(size_t x, size_t y, direction_t dir)
@@ -76,9 +66,7 @@ static void draw_animal(size_t x, size_t y, direction_t dir)
 		icon = 'v';
 		break;
 	}
-	attron(COLOR_PAIR(ANIMAL_PAIR));
-	mvaddch(y, x, icon | A_BOLD);
-	attroff(COLOR_PAIR(ANIMAL_PAIR));
+	mvaddch(y, x, A_REVERSE | A_BOLD | icon);
 }
 
 void draw_cell(const animal_t *cell, size_t x, size_t y)
