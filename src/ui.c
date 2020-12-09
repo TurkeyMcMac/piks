@@ -19,6 +19,7 @@ void begin_ui(bool do_graphics)
 	if (use_graphics) {
 		initscr();
 		nodelay(stdscr, true);
+		curs_set(0);
 	} else {
 		fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 	}
