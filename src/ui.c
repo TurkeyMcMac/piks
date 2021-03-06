@@ -18,6 +18,7 @@ void begin_ui(bool do_graphics)
 	use_graphics = do_graphics;
 	if (use_graphics) {
 		initscr();
+		cbreak();
 		nodelay(stdscr, true);
 		curs_set(0);
 	} else {
